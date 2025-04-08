@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 use Illuminate\Database\Eloquent\Model;
 
 class Pegawai extends Model
@@ -30,3 +32,4 @@ class Pegawai extends Model
         return $this->hasMany(BarangKeluar::class, 'penerima', 'id_user');
     }
 }
+

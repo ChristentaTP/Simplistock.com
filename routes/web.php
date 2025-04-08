@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\HomeController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Admin\BarangKeluarController;
 use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardController;
 use App\Http\Controllers\Pegawai\BarangController as PegawaiBarangController;
 use App\Http\Controllers\Pegawai\BarangKeluarController as PegawaiBarangKeluarController;
+use App\Http\Controllers\Controller;
 
 // Halaman utama (opsional)
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -43,6 +45,8 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     Route::delete('/barang-keluar/{id}', [BarangKeluarController::class, 'destroy'])->name('barangkeluar.destroy');
 });
 
+Route::get('/dashboard', [DashboardController::class, 'index']);
+
 
 Route::middleware(['pegawai'])->prefix('pegawai')->name('pegawai.')->group(function () {
     // Dashboard
@@ -54,3 +58,10 @@ Route::middleware(['pegawai'])->prefix('pegawai')->name('pegawai.')->group(funct
     Route::get('/barang-keluar/create', [PegawaiBarangKeluarController::class, 'create'])->name('barangkeluar.create');
     Route::post('/barang-keluar', [PegawaiBarangKeluarController::class, 'store'])->name('barangkeluar.store');
 });
+Route::get('/data/barang', [BarangController::class, 'index'])->name('data.barang');
+Route::get('/data/barang/create', [BarangController::class, 'create'])->name('data.barang.create');
+Route::post('/data/barang', [BarangController::class, 'store'])->name('data.barang.store');
+Route::get('/data/barang/{id}/edit', [BarangController::class, 'edit'])->name('data.barang.edit');
+Route::put('/data/barang/{id}', [BarangController::class, 'update'])->name('data.barang.update');
+Route::delete('/data/barang/{id}', [BarangController::class, 'destroy'])->name('data.barang.destroy');
+

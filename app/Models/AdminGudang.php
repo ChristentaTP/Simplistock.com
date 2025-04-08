@@ -19,18 +19,15 @@ class AdminGudang extends Model
         'password'
     ];
     
-    // Untuk keamanan, jangan sertakan password dalam hasil query
     protected $hidden = [
         'password'
     ];
     
-    // Relasi ke barang masuk
     public function barangMasuk()
     {
         return $this->hasMany(BarangMasuk::class, 'id_admin', 'id_admin');
     }
     
-    // Relasi ke barang keluar
     public function barangKeluar()
     {
         return $this->hasMany(BarangKeluar::class, 'id_admin', 'id_admin');
