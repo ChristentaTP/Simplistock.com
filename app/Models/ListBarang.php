@@ -15,11 +15,14 @@ class ListBarang extends Model
     protected $primaryKey = 'id_barang'; // primary key custom
     public $timestamps = false; // karena tabel tidak pakai created_at / updated_at
     protected $fillable = [
+        'id_barang', 
         'nama_barang',
         'tipe',
         'jumlah',
         'keterangan',
+         'tanggal_masuk' 
     ];
+    
      // Relasi ke barang masuk
      public function barangMasuk()
      {

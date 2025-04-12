@@ -1,64 +1,73 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Dashboard</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        table, th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-
-        th {
-            background-color: #f4f4f4;
-            text-align: left;
-        }
-    </style>
-</head>
-<body>
-<h1>Dashboard</h1>
-
 @extends('layout')
 
 @section('content')
-<h1 class="text-2xl font-bold mb-4">Dashboard</h1>
+<head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<h3 class="text-xl font-semibold mb-2">Data Barang</h3>
-<table class="w-full border border-gray-300 mt-4">
-    <thead>
-    <tr class="bg-gray-200">
-        <th class="p-2">No</th>
-        <th class="p-2">Nama Barang</th>
-        <th class="p-2">Tipe</th>
-        <th class="p-2">Jumlah</th>
-        <th class="p-2">Keterangan</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach($barang as $index => $b)
-        <tr class="border-t">
-            <td class="p-2">{{ $index + 1 }}</td>
-            <td class="p-2">{{ $b->nama_barang }}</td>
-            <td class="p-2">{{ $b->tipe }}</td>
-            <td class="p-2">{{ $b->jumlah }}</td>
-            <td class="p-2">{{ $b->keterangan }}</td>
-        </tr>
-    @endforeach
-    </tbody>
-</table>
+</head>
+<!-- Main Content -->
+<main class="container mx-auto px-4 pt-32 pb-20 max-w-6xl"> <!-- pt-32 to accommodate navbar and running text -->
 
-<a href="{{ route('admin.barang') }}"
-   class="inline-block mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-   Lihat Data Barang
-</a>
+<h2 class="mb-4" style="color: white;">Dashboard Pegawai - List Barang</h2>
+
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+
+    <form method="POST" action="{{ route('pegawai.barangkeluar.store') }}">
+        @csrf
+        <div class="mb-3">
+            <label class="form-label">ID Barang:</label>
+            <input type="text" name="id_barang" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Tanggal:</label>
+            <input type="date" name="tanggal" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Jumlah:</label>
+            <input type="number" name="jumlah" class="form-control" required min="1">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Kirim</button>
+    </form>
+
+    <hr class="my-5">
+
+    <h3 class="mb-3">Riwayat Barang Keluar oleh Anda</h3>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID Keluar</th>
+                    <th>ID Barang</th>
+                    <th>Nama Barang</th>
+                    <th>Tanggal</th>
+                    <th>Jumlah</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($riwayat as $r)
+                <tr>
+                    <td>{{ $r->id_keluar }}</td>
+                    <td>{{ $r->id_barang }}</td>
+                    <td>{{ $r->barang->nama_barang ?? 'Tidak ditemukan' }}</td>
+                    <td>{{ $r->tanggal }}</td>
+                    <td>{{ $r->jumlah }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
 @endsection
-
-    </tbody>
-</table>
-</body>
-</html>

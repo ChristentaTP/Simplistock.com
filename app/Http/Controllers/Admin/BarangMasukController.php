@@ -10,11 +10,30 @@ use Illuminate\Support\Facades\DB;
 
 class BarangMasukController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $barangMasuk = BarangMasuk::with('barang')->orderBy('tanggal', 'desc')->get();
-        return view('admin.barang_masuk.index', compact('barangMasuk'));
+        $query = BarangMasuk::with('barang')->orderBy('tanggal', 'desc');
+    
+        // Pencarian berdasarkan nama barang atau keterangan
+        if ($request->search) {
+            $query->where(function ($q) use ($request) {
+                $q->whereHas('barang', function ($sub) use ($request) {
+                    $sub->where('nama_barang', 'like', '%' . $request->search . '%');
+                })->orWhere('keterangan', 'like', '%' . $request->search . '%');
+            });
+        }
+    
+        // Filter berdasarkan barang
+        if ($request->filter_barang) {
+            $query->where('id_barang', $request->filter_barang);
+        }
+    
+        $barangMasuk = $query->get();
+        $listBarang = ListBarang::all();
+    
+        return view('admin.barang_masuk.index', compact('barangMasuk', 'listBarang'));
     }
+    
 
     public function create()
     {
@@ -27,7 +46,7 @@ class BarangMasukController extends Controller
         $request->validate([
             'id_barang' => 'required|exists:list_barang,id_barang',
             'jumlah' => 'required|integer|min:1',
-            'supplier' => 'required|string|max:255',
+            'keterangan' => 'required|string|max:255',
         ]);
 
         // Begin transaction
@@ -38,7 +57,7 @@ class BarangMasukController extends Controller
                 'id_barang' => $request->id_barang,
                 'tanggal' => now(),
                 'jumlah' => $request->jumlah,
-                'supplier' => $request->supplier,
+                'keterangan' => $request->keterangan,
                 'id_admin' => session('id_admin') // Assuming admin ID is stored in session
             ]);
 
@@ -67,7 +86,7 @@ class BarangMasukController extends Controller
         $request->validate([
             'id_barang' => 'required|exists:list_barang,id_barang',
             'jumlah' => 'required|integer|min:1',
-            'supplier' => 'required|string|max:255',
+            'keterangan' => 'required|string|max:255',
         ]);
 
         $barangMasuk = BarangMasuk::findOrFail($id);

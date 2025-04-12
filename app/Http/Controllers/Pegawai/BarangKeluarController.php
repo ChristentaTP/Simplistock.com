@@ -3,53 +3,62 @@
 namespace App\Http\Controllers\Pegawai;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Models\BarangKeluar;
 use App\Models\ListBarang;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
 
 class BarangKeluarController extends Controller
 {
-    public function create()
+    public function index()
     {
-        $listBarang = ListBarang::where('jumlah', '>', 0)->get();
-        return view('pegawai.barangkeluar', compact('listBarang'));
+        $id_user = Session::get('id_user');
+        $riwayat = BarangKeluar::where('penerima', $id_user)->with('barang')->get();
+        return view('pegawai.barangkeluar', compact('riwayat'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'id_barang' => 'required|exists:list_barang,id_barang',
+            'tanggal' => 'required|date',
             'jumlah' => 'required|integer|min:1',
         ]);
 
-        // Check if requested amount is available
-        $barang = ListBarang::findOrFail($request->id_barang);
+        $barang = ListBarang::where('id_barang', $request->id_barang)->first();
+
+        if (!$barang || $barang->jumlah < $request->jumlah) {
+            return back()->with('error', 'Stok barang tidak mencukupi.');
+        }
+
+        $id_keluar = Str::uuid()->toString(); // atau bisa format custom
+        $id_user = Session::get('id_user');
+
+        BarangKeluar::create([
+            'id_keluar' => $id_keluar,
+            'id_barang' => $request->id_barang,
+            'tanggal' => $request->tanggal,
+            'jumlah' => $request->jumlah,
+            'penerima' => $id_user,
+            'id_admin' => null,
+        ]);
+
+        // Update stok
+        $barang->jumlah -= $request->jumlah;
+        $barang->save();
+
+        return back()->with('success', 'Barang berhasil dikeluarkan.');
+        if (!$barang || $barang->jumlah < $request->jumlah) {
+            return back()->with('error', 'Stok barang tidak mencukupi.');
+        }
+        if (!$barang) {
+            return back()->with('error', 'Barang tidak ditemukan.');
+        }
+        
         if ($barang->jumlah < $request->jumlah) {
-            return redirect()->back()->withErrors(['jumlah' => 'Jumlah barang keluar melebihi stok yang tersedia!'])->withInput();
+            return back()->with('error', 'Stok barang tidak mencukupi.');
         }
-
-        // Begin transaction
-        DB::beginTransaction();
-        try {
-            // Create barang keluar record
-            BarangKeluar::create([
-                'id_barang' => $request->id_barang,
-                'tanggal' => now(),
-                'jumlah' => $request->jumlah,
-                'penerima' => session('id_user'), // Assuming the pegawai ID is stored in session
-                'id_admin' => null // Since the pegawai is creating this record, no admin is involved
-            ]);
-
-            // Update stock in list_barang
-            $barang->jumlah -= $request->jumlah;
-            $barang->save();
-
-            DB::commit();
-            return redirect()->route('pegawai.listbarang')->with('success', 'Barang berhasil diambil');
-        } catch (\Exception $e) {
-            DB::rollback();
-            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
-        }
+         
     }
 }

@@ -2,24 +2,27 @@
 
 namespace App\Http\Controllers\Pegawai;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Models\ListBarang;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-      
-        // Ambil data untuk ringkasan
-        $totalBarang = ListBarang::count();
+        $query = ListBarang::query();
 
-        // Ambil 5 barang terbaru
-        $barang = ListBarang::latest()->take(5)->get();
+        if ($request->filled('tipe')) {
+            $query->where('tipe', $request->tipe);
+        }
 
-        return view('pegawai.dashboard', compact(
-            'barang', 'totalBarang', 
-        ));
+        if ($request->filled('keterangan')) {
+            $query->where('keterangan', $request->keterangan);
+        }
+
+        $barangs = ListBarang::all(); // ambil semua data barang
+
+        return view('pegawai.dashboard', compact('barangs'));
     }
 }
 

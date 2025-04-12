@@ -1,139 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Data Barang</title>
-    <!-- Bootstrap 5 CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="p-4">
+@extends('layout')
+@section('content')    
+<!-- Main Content -->
+<main class="container mx-auto px-4 pt-32 pb-20 max-w-6xl"> <!-- pt-32 to accommodate navbar and running text -->
+   <h2 class="text-3xl font-bold mb-6 text-center text-white">Data Barang</h2>
 
-<div class="container">
-    <h2 class="mb-4">Data Barang</h2>
+   <!-- Tombol Tambah - Centered
+   <div class="mb-4 text-center">
+     <button onclick="document.getElementById('formModal').classList.remove('hidden')" 
+             class="bg-yellow-400 text-black px-6 py-2 rounded-full font-semibold hover:bg-yellow-300 transition">
+       + Tambah Barang
+     </button>
+   </div> -->
 
-    <!-- Tombol Tambah -->
-    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#formModal" onclick="openCreateModal()">+ Tambah Barang</button>
+   <!-- Tabel Data - Centered Container -->
+   <div class="overflow-x-auto bg-white rounded-xl shadow-lg mx-auto">
+     <table class="min-w-full text-gray-800">
+       <thead class="bg-gray-200 text-gray-700">
+         <tr>
+           <th class="py-3 px-4 text-center">Id Barang</th>
+           <th class="py-3 px-4 text-center">Nama Barang</th>
+           <th class="py-3 px-4 text-center">Tipe</th>
+           <th class="py-3 px-4 text-center">Jumlah</th>
+           <th class="py-3 px-4 text-center">Keterangan/Supplier</th>
 
-    <!-- Tabel Barang -->
-    <table class="table table-bordered">
-        <thead class="table-light">
-        <tr>
-            <th>Nama</th>
-            <th>Tipe</th>
-            <th>Jumlah</th>
-            <th>Keterangan</th>
-            <th>Aksi</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach ($barang as $item)
-            <tr id="row-{{ $item->id_barang }}">
-                <td>{{ $item->nama_barang }}</td>
-                <td>{{ $item->tipe }}</td>
-                <td>{{ $item->jumlah }}</td>
-                <td>{{ $item->keterangan }}</td>
-                <td>
-                    <button class="btn btn-sm btn-warning" onclick="openEditModal({{ $item }})">Edit</button>
-                    <button class="btn btn-sm btn-danger" onclick="deleteBarang({{ $item->id_barang }})">Hapus</button>
-                </td>
-            </tr>
-        @endforeach
-        </tbody>
-    </table>
-</div>
+         </tr>
+       </thead>
+       <tbody>
+       @foreach ($barangs as $barang)
+                <tr>
+                    <td>{{ $barang->id_barang }}</td>
+                    <td>{{ $barang->nama_barang }}</td>
+                    <td>{{ $barang->tipe }}</td>
+                    <td>{{ $barang->jumlah }}</td>
+                    <td>{{ $barang->keterangan }}</td>
+                    
+                </tr>
+         </tr>
+         @endforeach
+       </tbody>
+     </table>
+   </div>
+</main>
 
-<!-- Modal -->
-<div class="modal fade" id="formModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <form id="barangForm" class="modal-content">
-            @csrf
-            <input type="hidden" name="id_barang" id="id_barang">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalTitle">Tambah Barang</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-2">
-                    <label>Nama Barang:</label>
-                    <input type="text" name="nama_barang" id="nama_barang" class="form-control" required>
-                </div>
-                <div class="mb-2">
-                    <label>Tipe:</label>
-                    <input type="text" name="tipe" id="tipe" class="form-control" required>
-                </div>
-                <div class="mb-2">
-                    <label>Jumlah:</label>
-                    <input type="number" name="jumlah" id="jumlah" class="form-control" required>
-                </div>
-                <div class="mb-2">
-                    <label>Keterangan:</label>
-                    <input type="text" name="keterangan" id="keterangan" class="form-control">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                <button type="button" class="btn btn-success" onclick="submitForm()">Simpan</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- JS Bootstrap + AJAX -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    function openCreateModal() {
-        document.getElementById('modalTitle').innerText = 'Tambah Barang';
-        document.getElementById('barangForm').reset();
-        document.getElementById('id_barang').value = '';
-    }
-
-    function openEditModal(data) {
-        document.getElementById('modalTitle').innerText = 'Edit Barang';
-        document.getElementById('id_barang').value = data.id_barang;
-        document.getElementById('nama_barang').value = data.nama_barang;
-        document.getElementById('tipe').value = data.tipe;
-        document.getElementById('jumlah').value = data.jumlah;
-        document.getElementById('keterangan').value = data.keterangan;
-        new bootstrap.Modal(document.getElementById('formModal')).show();
-    }
-
-    function submitForm() {
-        const form = document.getElementById('barangForm');
-        const formData = new FormData(form);
-        const id = formData.get('id_barang');
-        const method = id ? 'PUT' : 'POST';
-        const url = id ? `/data/barang/${id}` : `/data/barang`;
-
-        fetch(url, {
-            method: method,
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: formData
-        })
-            .then(res => res.json())
-            .then(data => {
-                alert(data.message);
-                location.reload();
-            });
-    }
-
-    function deleteBarang(id) {
-        if (confirm("Yakin ingin menghapus barang ini?")) {
-            fetch(`/data/barang/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                }
-            })
-                .then(res => res.json())
-                .then(data => {
-                    alert(data.message);
-                    location.reload();
-                });
-        }
-    }
-</script>
-
-</body>
-</html>
+<!-- Modal Tambah - Centered Content -->
+<!-- <div id="formModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden z-[100] px-4">
+ <div class="bg-white text-gray-800 p-6 rounded-xl w-full max-w-lg relative shadow-2xl">
+   <button onclick="document.getElementById('formModal').classList.add('hidden')" 
+           class="absolute top-2 right-3 text-gray-600 hover:text-red-600 text-2xl font-bold">&times;</button>
+   <h3 class="text-xl font-bold mb-4 text-center">Tambah Barang</h3>
+   <form>
+     <div class="mb-4">
+       <label class="block mb-1 font-semibold text-center">Nama Barang</label>
+       <input type="text" class="w-full px-3 py-2 border rounded text-center" />
+     </div>
+     <div class="mb-4">
+       <label class="block mb-1 font-semibold text-center">Tipe</label>
+       <input type="text" class="w-full px-3 py-2 border rounded text-center" />
+     </div>
+     <div class="mb-4">
+       <label class="block mb-1 font-semibold text-center">Jumlah</label>
+       <input type="number" class="w-full px-3 py-2 border rounded text-center" />
+     </div>
+     <div class="mb-4">
+       <label class="block mb-1 font-semibold text-center">Keterangan / Supplier</label>
+       <input type="text" class="w-full px-3 py-2 border rounded text-center" />
+     </div>
+     <div class="text-center">
+       <button type="submit" class="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600 font-semibold">
+         Simpan
+       </button>
+     </div>
+   </form>
+ </div>
+</div> -->
+@endsection
