@@ -53,5 +53,7 @@ Route::middleware([PegawaiMiddleware::class])->prefix('pegawai')->name('pegawai.
     Route::get('/barang-keluar', [PegawaiBarangKeluarController::class, 'index'])->name('barangkeluar.index');
     Route::get('/barang-keluar/{id}/create', [PegawaiBarangKeluarController::class, 'create'])->name('barangkeluar.create');
     Route::post('/barang-keluar', [PegawaiBarangKeluarController::class, 'store'])->name('barangkeluar.store');
+    Route::get('/listbarang', [BarangController::class, 'list'])->name('listbarang');
+    Route::get('/barangkeluar/create', [BarangKeluarController::class, 'create'])->name('barangkeluar.create');
 });
 
