@@ -1,64 +1,78 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Dashboard</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        table, th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-
-        th {
-            background-color: #f4f4f4;
-            text-align: left;
-        }
-    </style>
-</head>
-<body>
-<h1>Dashboard</h1>
-
 @extends('layout')
 
 @section('content')
-<h1 class="text-2xl font-bold mb-4">Dashboard</h1>
+<div class="container mt-4">
+    <h1 class="mb-4">Dashboard Admin</h1>
 
-<h3 class="text-xl font-semibold mb-2">Data Barang</h3>
-<table class="w-full border border-gray-300 mt-4">
-    <thead>
-    <tr class="bg-gray-200">
-        <th class="p-2">No</th>
-        <th class="p-2">Nama Barang</th>
-        <th class="p-2">Tipe</th>
-        <th class="p-2">Jumlah</th>
-        <th class="p-2">Keterangan</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach($barang as $index => $b)
-        <tr class="border-t">
-            <td class="p-2">{{ $index + 1 }}</td>
-            <td class="p-2">{{ $b->nama_barang }}</td>
-            <td class="p-2">{{ $b->tipe }}</td>
-            <td class="p-2">{{ $b->jumlah }}</td>
-            <td class="p-2">{{ $b->keterangan }}</td>
-        </tr>
-    @endforeach
-    </tbody>
-</table>
+    {{-- Ringkasan Data --}}
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card shadow-sm text-white bg-primary">
+                <div class="card-body">
+                    <h5 class="card-title">Total Barang</h5>
+                    <p class="card-text display-6">{{ $totalBarang }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-white bg-success">
+                <div class="card-body">
+                    <h5 class="card-title">Total Masuk</h5>
+                    <p class="card-text display-6">{{ $totalMasuk }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-white bg-danger">
+                <div class="card-body">
+                    <h5 class="card-title">Total Keluar</h5>
+                    <p class="card-text display-6">{{ $totalKeluar }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-white bg-info">
+                <div class="card-body">
+                    <h5 class="card-title">Total Pegawai</h5>
+                    <p class="card-text display-6">{{ $totalPegawai }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<a href="{{ route('admin.barang') }}"
-   class="inline-block mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-   Lihat Data Barang
-</a>
+    {{-- Tabel Barang Terbaru --}}
+    <div class="card">
+        <div class="card-header bg-secondary text-white">
+            <h5 class="mb-0">5 Barang Terbaru</h5>
+        </div>
+        <div class="card-body">
+            @if ($barang->count() > 0)
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>Nama Barang</th>
+                                <th>Stok</th>
+                                <th>Kategori</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($barang as $index => $b)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $b->nama_barang }}</td>
+                                    <td>{{ $b->stok }}</td>
+                                    <td>{{ $b->kategori }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @else
+                <p class="text-muted">Tidak ada data barang terbaru.</p>
+            @endif
+        </div>
+    </div>
+</div>
 @endsection
-
-    </tbody>
-</table>
-</body>
-</html>

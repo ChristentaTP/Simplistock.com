@@ -20,7 +20,8 @@ class DashboardController extends Controller
         $totalPegawai = Pegawai::count();
 
         // Ambil 5 barang terbaru
-        $barang = ListBarang::latest()->take(5)->get();
+        $barang = ListBarang::orderBy('id_barang', 'desc')->take(5)->get();
+        $barangTerbaru = BarangMasuk::with('barang')->orderBy('tanggal', 'desc')->take(5)->get();
 
         return view('admin.dashboard', compact(
             'barang', 'totalBarang', 'totalMasuk', 'totalKeluar', 'totalPegawai'

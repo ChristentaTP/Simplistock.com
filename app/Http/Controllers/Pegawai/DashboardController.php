@@ -15,7 +15,7 @@ class DashboardController extends Controller
         $totalBarang = ListBarang::count();
 
         // Ambil 5 barang terbaru
-        $barang = ListBarang::latest()->take(5)->get();
+        $barang = ListBarang::orderBy('id_barang', 'desc')->take(5)->get();
 
         return view('pegawai.dashboard', compact(
             'barang', 'totalBarang', 

@@ -19,6 +19,7 @@ class ListBarang extends Model
         'tipe',
         'jumlah',
         'keterangan',
+        'tanggal_masuk' 
     ];
      // Relasi ke barang masuk
      public function barangMasuk()
