@@ -71,17 +71,19 @@
     </div>
   </nav>
   
-  <!-- Main Content -->
-  <div class="container mx-auto">
+
+ <!-- Main Content -->
+ <div class="container mx-auto">
     <!-- Dynamic Content -->
     <main class="pt-32 px-6 py-4">
       @yield('content')
     </main>
-    
-    <!-- Footer -->
-    <footer class="bg-black text-white/80 text-center py-4 mt-16">
-      <p>&copy; 2025 Kelompok 13 - Sistem Inventaris Barang. All rights reserved.</p>
-    </footer>
-  </div>
+
+
+<footer class="bg-black text-white/80 text-center py-4 mt-16 md:pl-64">
+    <p>&copy; 2025 Kelompok 13 - Sistem Inventaris Barang. All rights reserved.</p>
+  </footer>
+  </aside>
+
 </body>
 </html>

@@ -4,14 +4,6 @@
 <main class="container mx-auto px-4 pt-32 pb-20 max-w-6xl"> <!-- pt-32 to accommodate navbar and running text -->
    <h2 class="text-3xl font-bold mb-6 text-center text-white">Data Barang</h2>
 
-   <!-- Tombol Tambah - Centered
-   <div class="mb-4 text-center">
-     <button onclick="document.getElementById('formModal').classList.remove('hidden')" 
-             class="bg-yellow-400 text-black px-6 py-2 rounded-full font-semibold hover:bg-yellow-300 transition">
-       + Tambah Barang
-     </button>
-   </div> -->
-
    <!-- Tabel Data - Centered Container -->
    <div class="overflow-x-auto bg-white rounded-xl shadow-lg mx-auto">
      <table class="min-w-full text-gray-800">

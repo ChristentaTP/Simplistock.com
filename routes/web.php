@@ -44,9 +44,9 @@ Route::middleware([AdminMiddleware::class])->prefix('admin')->name('admin.')->gr
     Route::get('/barang-masuk', [BarangMasukController::class, 'index'])->name('barangmasuk.index');
     Route::get('/barang-masuk/create', [BarangMasukController::class, 'create'])->name('barangmasuk.create');
     Route::post('/barang-masuk', [BarangMasukController::class, 'store'])->name('barangmasuk.store');
-    Route::get('/barang-masuk/edit', [BarangMasukController::class, 'edit'])->name('barangmasuk.edit');
-    Route::put('/barang-masuk/update', [BarangMasukController::class, 'update'])->name('barangmasuk.update');
-    Route::delete('/barang-masuk/delete', [BarangMasukController::class, 'destroy'])->name('barangmasuk.destroy');
+    Route::get('/barang-masuk/{id}/edit', [BarangMasukController::class, 'edit'])->name('barangmasuk.edit');
+    Route::put('/barang-masuk/{id}', [BarangMasukController::class, 'update'])->name('barangmasuk.update');
+    Route::delete('/barang-masuk/{id}', [BarangMasukController::class, 'destroy'])->name('barangmasuk.destroy');
 
     // Barang Keluar (CRUD + stok berkurang)
     Route::get('/barang-keluar', [BarangKeluarController::class, 'index'])->name('barangkeluar.index');

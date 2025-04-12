@@ -27,8 +27,8 @@
     </div>
 
     {{-- Tabel Data --}}
-    <div class="overflow-x-auto bg-white rounded-xl shadow-lg">
-        <table class="min-w-full text-gray-800">
+    <div class="overflow-y-auto max-h-[500px] bg-white rounded-xl shadow-lg">
+    <table class="min-w-full text-gray-800">
             <thead class="bg-gray-200 text-gray-700">
                 <tr>
                     <th class="py-3 px-4 text-center">Tanggal</th>
@@ -45,8 +45,8 @@
                         <td class="py-2 px-4 text-center">{{ \Carbon\Carbon::parse($bk->tanggal)->format('d-m-Y') }}</td>
                         <td class="py-2 px-4 text-center">{{ $bk->barang->nama_barang ?? 'Barang tidak ditemukan' }}</td>
                         <td class="py-2 px-4 text-center">{{ $bk->jumlah }}</td>
-                        <td class="py-2 px-4 text-center">{{ $bk->pegawai->nama ?? 'Pegawai tidak ditemukan' }}</td>
-                        <td class="py-2 px-4 text-center">{{ $bk->admin->nama ?? 'Admin tidak ditemukan' }}</td>
+                        <td class="py-2 px-4 text-center">{{ $bk->pegawai->nama_user ?? 'Pegawai tidak ditemukan' }}</td>
+                        <td class="py-2 px-4 text-center">{{ $bk->admin->nama_admin ?? 'Admin tidak ditemukan' }}</td>
                         <td class="py-2 px-4 flex justify-center space-x-2">
                             <a href="{{ route('admin.barangkeluar.edit', $bk->id_keluar) }}" 
                                class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm">

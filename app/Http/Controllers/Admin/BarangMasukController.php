@@ -25,9 +25,11 @@ class BarangMasukController extends Controller
     
         // Filter berdasarkan barang
         if ($request->filter_barang) {
-            $query->where('id_barang', $request->filter_barang);
+            $query->whereHas('barang', function ($q) use ($request) {
+                $q->where('nama_barang', 'like', '%' . $request->filter_barang . '%');
+            });
         }
-    
+        
         $barangMasuk = $query->get();
         $listBarang = ListBarang::all();
     
@@ -85,8 +87,8 @@ class BarangMasukController extends Controller
     {
         $request->validate([
             'id_barang' => 'required|exists:list_barang,id_barang',
-            'jumlah' => 'required|integer|min:1',
-            'keterangan' => 'required|string|max:255',
+            'jumlah' => 'required|integer',
+            'supplier' => 'required|string|max:255',
         ]);
 
         $barangMasuk = BarangMasuk::findOrFail($id);
@@ -120,7 +122,7 @@ class BarangMasukController extends Controller
             $barangMasuk->update([
                 'id_barang' => $request->id_barang,
                 'jumlah' => $request->jumlah,
-                'supplier' => $request->supplier
+                'keterangan' => $request->supplier
             ]);
             
             DB::commit();
