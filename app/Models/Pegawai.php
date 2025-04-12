@@ -12,7 +12,9 @@ class Pegawai extends Model
     protected $table = 'pegawai';
     protected $primaryKey = 'id_user';
     public $timestamps = false;
-    
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $fillable = [
         'nama_user', 
         'username', 

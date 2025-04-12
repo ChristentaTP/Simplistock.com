@@ -9,9 +9,9 @@ use App\Http\Controllers\Admin\BarangController;
 use App\Http\Controllers\Admin\BarangMasukController;
 use App\Http\Controllers\Admin\BarangKeluarController;
 use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardController;
-use App\Http\Controllers\Pegawai\BarangController as PegawaiBarangController;
 use App\Http\Controllers\Pegawai\BarangKeluarController as PegawaiBarangKeluarController;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\PegawaiMiddleware;
 
 // Halaman utama (opsional)
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -21,8 +21,10 @@ Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
+
 // Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function () {
 Route::middleware([AdminMiddleware::class])->prefix('admin')->name('admin.')->group(function () {
+
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     // List Barang (read-only)
@@ -46,13 +48,10 @@ Route::middleware([AdminMiddleware::class])->prefix('admin')->name('admin.')->gr
 });
 
 
-Route::middleware(['pegawai'])->prefix('pegawai')->name('pegawai.')->group(function () {
-    // Dashboard
+Route::middleware([PegawaiMiddleware::class])->prefix('pegawai')->name('pegawai.')->group(function () {
     Route::get('/dashboard', [PegawaiDashboardController::class, 'index'])->name('dashboard');
-    // List Barang (read-only)
-    Route::get('/list-barang', [PegawaiBarangController::class, 'index'])->name('listbarang');
-
-    // Input Barang Keluar (hanya store, tidak bisa edit/delete)
-    Route::get('/barang-keluar/create', [PegawaiBarangKeluarController::class, 'create'])->name('barangkeluar.create');
+    Route::get('/barang-keluar', [PegawaiBarangKeluarController::class, 'index'])->name('barangkeluar.index');
+    Route::get('/barang-keluar/{id}/create', [PegawaiBarangKeluarController::class, 'create'])->name('barangkeluar.create');
     Route::post('/barang-keluar', [PegawaiBarangKeluarController::class, 'store'])->name('barangkeluar.store');
 });
+
