@@ -19,9 +19,9 @@
     @endif
 
     {{-- Tombol Tambah - Centered --}}
-    <div class="mb-4 text-center">
+    <div class="mb-6 text-center">
         <a href="{{ route('admin.barangkeluar.create') }}" 
-           class="bg-yellow-400 text-black px-6 py-2 rounded-full font-semibold hover:bg-yellow-300 transition inline-block">
+        class="bg-yellow-400 text-black px-6 py-2 rounded-full font-semibold hover:bg-yellow-300 transition inline-block">
             + Tambah Barang Keluar
         </a>
     </div>
@@ -42,12 +42,12 @@
             <tbody>
                 @forelse($barangKeluar as $bk)
                     <tr class="border-t hover:bg-gray-50">
-                        <td class="py-2 px-4 text-center">{{ \Carbon\Carbon::parse($bk->tanggal)->format('d-m-Y') }}</td>
-                        <td class="py-2 px-4 text-center">{{ $bk->barang->nama_barang ?? 'Barang tidak ditemukan' }}</td>
+                        <td class="py-d px-4 text-center">{{ \Carbon\Carbon::parse($bk->tanggal)->format('d-m-Y') }}</td>
+                        <td class="py-d px-4 text-center">{{ $bk->barang->nama_barang ?? 'Barang tidak ditemukan' }}</td>
                         <td class="py-2 px-4 text-center">{{ $bk->jumlah }}</td>
-                        <td class="py-2 px-4 text-center">{{ $bk->pegawai->nama_user ?? 'Pegawai tidak ditemukan' }}</td>
-                        <td class="py-2 px-4 text-center">{{ $bk->admin->nama_admin ?? 'Admin tidak ditemukan' }}</td>
-                        <td class="py-2 px-4 flex justify-center space-x-2">
+                        <td class="py-d px-4 text-center">{{ $bk->pegawai->nama_user ?? 'Pegawai tidak ditemukan' }}</td>
+                        <td class="py-d px-4 text-center">{{ $bk->admin->nama_admin ?? 'Admin tidak ditemukan' }}</td>
+                        <td class="py-d px-4 flex justify-center space-x-d">
                             <a href="{{ route('admin.barangkeluar.edit', $bk->id_keluar) }}" 
                                class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm">
                                 Edit

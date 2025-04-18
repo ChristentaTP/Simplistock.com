@@ -20,7 +20,7 @@ class DashboardController extends Controller
             $query->where('keterangan', $request->keterangan);
         }
 
-        $barangs = ListBarang::all(); // ambil semua data barang
+        $barangs = $query->get();
 
         return view('pegawai.dashboard', compact('barangs'));
     }

@@ -4,15 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes; // tambahan
 
 class ListBarang extends Model
 {
     use HasFactory;
+    use HasFactory, SoftDeletes; // tambahan
 
     protected $table = 'list_barang'; // nama tabel di database
     protected $primaryKey = 'id_barang'; // primary key custom
     public $timestamps = false; // karena tabel tidak pakai created_at / updated_at
-    public $incrementing = false;
     protected $keyType = 'string';
 
     protected $fillable = [
@@ -24,13 +25,15 @@ class ListBarang extends Model
     ];
      // Relasi ke barang masuk
      public function barangMasuk()
-     {
-         return $this->hasMany(BarangMasuk::class, 'id_barang', 'id_barang');
-     }
-     
-     // Relasi ke barang keluar
-     public function barangKeluar()
-     {
-         return $this->hasMany(BarangKeluar::class, 'id_barang', 'id_barang');
-     }
+{
+    return $this->hasMany(BarangMasuk::class, 'id_barang', 'id_barang')
+                ->whereNull('deleted_at'); // abaikan yang sudah di-soft delete
+}
+
+// Relasi ke barang keluar
+public function barangKeluar()
+{
+    return $this->hasMany(BarangKeluar::class, 'id_barang', 'id_barang')
+                ->whereNull('deleted_at');
+}
 }

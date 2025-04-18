@@ -17,7 +17,7 @@
 
     {{-- Tombol Tambah - Centered --}}
     <div class="mb-6 text-center">
-        <a href="{{ route('admin.barangkeluar.create') }}" 
+            <a href="{{ route('admin.barangmasuk.create') }}" 
            class="bg-yellow-400 text-black px-6 py-2 rounded-full font-semibold hover:bg-yellow-300 transition inline-block">
             + Tambah Barang Masuk
         </a>
@@ -71,7 +71,7 @@
             @forelse ($barangMasuk as $bm)
                 <tr class="border-t hover:bg-gray-50">
                     <td class="py-2 px-4 text-center">{{ $bm->tanggal }}</td>
-                    <td class="py-2 px-4 text-center">{{ $bm->nama_barang ?? 'Barang tidak ditemukan' }}</td>
+                    <td class="py-2 px-4 text-center">{{ $bm->barang->nama_barang ?? 'Barang tidak ditemukan' }}</td>
                     <td class="py-2 px-4 text-center">{{ $bm->jumlah }}</td>
                     <td class="py-2 px-4 text-center">{{ $bm->keterangan }}</td>
                     <td class="py-2 px-4 flex justify-center space-x-2">

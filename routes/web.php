@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\DashboardController ;
 use App\Http\Controllers\Admin\BarangController;
 use App\Http\Controllers\Admin\BarangMasukController;
 use App\Http\Controllers\Admin\BarangKeluarController;
+use App\Http\Controllers\Admin\TrashController;
 use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardController;
 use App\Http\Controllers\Pegawai\BarangKeluarController as PegawaiBarangKeluarController;
 use App\Http\Middleware\AdminMiddleware;
@@ -29,6 +30,10 @@ Route::middleware([AdminMiddleware::class])->prefix('admin')->name('admin.')->gr
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     // List Barang (read-only)
     Route::get('/list-barang', [BarangController::class, 'index'])->name('listbarang');
+    Route::get('/list-barang/{id}/edit', [BarangController::class, 'edit'])->name('barang.edit');
+    Route::put('/list-barang/{id}', [BarangController::class, 'update'])->name('barang.update');
+    Route::delete('/list-barang/{id}', [BarangController::class, 'destroy'])->name('barang.destroy');
+    Route::post('/list-barang', [BarangController::class, 'store'])->name('barang.store');
 
     // Barang Masuk (CRUD)
     Route::get('/barang-masuk', [BarangMasukController::class, 'index'])->name('barangmasuk.index');
@@ -45,7 +50,16 @@ Route::middleware([AdminMiddleware::class])->prefix('admin')->name('admin.')->gr
     Route::get('/barang-keluar/{id}/edit', [BarangKeluarController::class, 'edit'])->name('barangkeluar.edit');
     Route::put('/barang-keluar/{id}', [BarangKeluarController::class, 'update'])->name('barangkeluar.update');
     Route::delete('/barang-keluar/{id}', [BarangKeluarController::class, 'destroy'])->name('barangkeluar.destroy');
-});
+
+    // Tambahan Trash
+    Route::prefix('trash')->name('trash.')->group(function () {
+        Route::get('/', [TrashController::class, 'index'])->name('index');
+        Route::post('/restore/{type}/{id}', [TrashController::class, 'restore'])->name('restore');
+        Route::delete('/force-delete/{type}/{id}', [TrashController::class, 'forceDelete'])->name('forceDelete');
+    });
+
+}); // << Penutup untuk group admin
+
 
 
 Route::middleware([PegawaiMiddleware::class])->prefix('pegawai')->name('pegawai.')->group(function () {
@@ -56,4 +70,3 @@ Route::middleware([PegawaiMiddleware::class])->prefix('pegawai')->name('pegawai.
     Route::get('/listbarang', [BarangController::class, 'list'])->name('listbarang');
     Route::get('/barangkeluar/create', [BarangKeluarController::class, 'create'])->name('barangkeluar.create');
 });
-

@@ -88,7 +88,7 @@ class BarangMasukController extends Controller
         $request->validate([
             'id_barang' => 'required|exists:list_barang,id_barang',
             'jumlah' => 'required|integer',
-            'supplier' => 'required|string|max:255',
+            'keterangan' => 'required|string|max:255', #diubah dari supplier ke keterangan
         ]);
 
         $barangMasuk = BarangMasuk::findOrFail($id);
@@ -122,7 +122,7 @@ class BarangMasukController extends Controller
             $barangMasuk->update([
                 'id_barang' => $request->id_barang,
                 'jumlah' => $request->jumlah,
-                'keterangan' => $request->supplier
+                'keterangan' => $request->keterangan
             ]);
             
             DB::commit();

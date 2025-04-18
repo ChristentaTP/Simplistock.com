@@ -4,14 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BarangKeluar extends Model
 {
     use HasFactory;
+    use HasFactory, SoftDeletes;
     
     protected $table = 'barang_keluar';
     protected $primaryKey = 'id_keluar';
     public $timestamps = false;
+    protected $keyType = 'string'; #Tambahan
     
     protected $fillable = [
         'id_barang', 

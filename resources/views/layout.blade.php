@@ -54,13 +54,11 @@
             <a href="{{ route('admin.listbarang') }}" class="hover:text-yellow-400 transition">Data Barang</a>
             <a href="{{ route('admin.barangmasuk.index') }}" class="hover:text-yellow-400 transition">Data Masuk</a>
             <a href="{{ route('admin.barangkeluar.index') }}" class="hover:text-yellow-400 transition">Barang Keluar</a>
-            <a href="#" class="hover:text-yellow-400 transition">Laporan</a>
-          @elseif(session('role') === 'pegawai')
-            <a href="{{ route('pegawai.dashboard') }}" class="hover:text-yellow-400 transition">Home</a>
-            <a href="{{ route('pegawai.listbarang') }}" class="hover:text-yellow-400 transition">Data Barang</a>
-            <a href="{{ route('pegawai.barangkeluar.create') }}" class="hover:text-yellow-400 transition">Ambil Barang</a>
-            <a href="#" class="hover:text-yellow-400 transition">Laporan</a>
-          @else
+            <a href="{{ route('admin.trash.index') }}" class="hover:text-yellow-400 transition text-red-300 font-bold">🗑️ Sampah</a>
+            @elseif(session('role') === 'pegawai')
+              <a href="{{ route('pegawai.dashboard') }}" class="hover:text-yellow-400 transition">Home</a>
+              <a href="{{ route('pegawai.barangkeluar.index') }}" class="hover:text-yellow-400 transition">Ambil Barang</a>
+                      @else
             <a href="{{ route('login') }}" class="hover:text-yellow-400 transition">Login</a>
           @endif
         </div>
